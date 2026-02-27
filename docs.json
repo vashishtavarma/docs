@@ -9,11 +9,7 @@
   "colors": {
     "primary": "#16A34A",
     "light": "#22c55e",
-    "dark": "#15803D",
-    "background": {
-      "light": "#f8fafc",
-      "dark": "#0f172a"
-    }
+    "dark": "#15803D"
   },
   "favicon": {
     "light": "/favicon.svg",
@@ -120,9 +116,6 @@
     ]
   },
   "fonts": {
-    "headings": {
-      "family": "Outfit"
-    },
     "body": {
       "family": "Outfit"
     }
