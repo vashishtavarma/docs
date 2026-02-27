@@ -1,0 +1,155 @@
+---
+title: "Local development setup"
+description: "Run EduTube backend and frontend locally"
+icon: "laptop-code"
+---
+
+## Overview
+
+This guide walks you through running the EduTube API and frontend on your machine for development and testing.
+
+<Info>
+  **Repository structure**: Backend and frontend live under `edutube/backend` and `edutube/frontend`. The docs site is separate in the `docs` folder.
+</Info>
+
+## Prerequisites
+
+- **Python 3.11+** — Backend
+- **Node.js 18+** — Frontend and docs
+- **MongoDB** — Local instance or [MongoDB Atlas](https://www.mongodb.com/atlas)
+- **Git** — Clone the repo
+
+## Backend setup
+
+<Steps>
+<Step title="Navigate to backend">
+
+```bash
+cd edutube/backend
+```
+
+</Step>
+<Step title="Create and activate virtual environment">
+
+<CodeGroup>
+
+```bash Linux/macOS
+python -m venv .venv
+source .venv/bin/activate
+```
+
+```bash Windows (Git Bash)
+python -m venv .venv
+source .venv/Scripts/activate
+```
+
+</CodeGroup>
+
+</Step>
+<Step title="Install dependencies">
+
+```bash
+pip install -r requirements.txt
+```
+
+</Step>
+<Step title="Configure environment">
+
+Copy the example env file and edit it:
+
+```bash
+cp .env.example .env
+```
+
+Required variables:
+
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `JWT_SECRET` | Secret for JWT signing | `your-super-secure-jwt-secret` |
+| `MONGODB_URL` | MongoDB connection string | `mongodb://localhost:27017` or Atlas URI |
+| `FRONTEND_URL` | CORS origin for frontend | `http://localhost:5173` |
+
+Optional: `YT_KEY` (YouTube API key), AWS credentials for chatbot, `S3_BUCKET` for transcripts.
+
+</Step>
+<Step title="Run the server">
+
+```bash
+uvicorn main:app --host 0.0.0.0 --port 5000
+```
+
+Or if `uvicorn` is not in PATH:
+
+```bash
+python -m uvicorn main:app --host 0.0.0.0 --port 5000
+```
+
+API base: `http://localhost:5000/api/v1`
+
+</Step>
+</Steps>
+
+## Frontend setup
+
+<Steps>
+<Step title="Navigate to frontend">
+
+```bash
+cd edutube/frontend
+```
+
+</Step>
+<Step title="Install dependencies">
+
+```bash
+npm install
+```
+
+</Step>
+<Step title="Configure environment">
+
+```bash
+cp .env.example .env
+```
+
+Set `VITE_API_BASE_URL=http://localhost:5000` so the frontend talks to your local API.
+
+</Step>
+<Step title="Run dev server">
+
+```bash
+npm run dev
+```
+
+App runs at `http://localhost:5173`.
+
+</Step>
+</Steps>
+
+## Verify setup
+
+1. Open `http://localhost:5173` in a browser.
+2. Sign up or log in.
+3. Create a journey and add a chapter.
+4. Confirm data appears in MongoDB.
+
+## Optional: docs preview
+
+To preview the documentation site:
+
+```bash
+cd docs
+npm i -g mint
+mint dev
+```
+
+Docs run at `http://localhost:3000`.
+
+## Common issues
+
+| Issue | Solution |
+|-------|----------|
+| `uvicorn` not found | Use `python -m uvicorn main:app ...` |
+| CORS errors | Ensure `FRONTEND_URL` in `.env` matches your frontend origin |
+| MongoDB connection failed | Check `MONGODB_URL`; ensure MongoDB is running locally or Atlas IP is allowed |
+| Port already in use | Change backend port in `PORT` env var; update frontend `VITE_API_BASE_URL` |

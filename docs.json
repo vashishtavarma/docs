@@ -1,15 +1,24 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "openapi": ["./api-reference/openapi.json"],
+  "openapi": [
+    "./api-reference/openapi.json"
+  ],
   "theme": "mint",
   "name": "EduTube",
   "description": "Turn YouTube playlists into structured learning journeys. Track progress, take notes, and learn at your own pace.",
   "colors": {
     "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "light": "#22c55e",
+    "dark": "#15803D",
+    "background": {
+      "light": "#f8fafc",
+      "dark": "#0f172a"
+    }
   },
-  "favicon": "/favicon.svg",
+  "favicon": {
+    "light": "/favicon.svg",
+    "dark": "/favicon.svg"
+  },
   "logo": {
     "light": "/logo/light.svg",
     "dark": "/logo/dark.svg"
@@ -34,7 +43,10 @@
         "groups": [
           {
             "group": "Getting started",
-            "pages": ["index", "quickstart"]
+            "pages": [
+              "index",
+              "quickstart"
+            ]
           },
           {
             "group": "Using EduTube",
@@ -52,12 +64,32 @@
         "tab": "For developers",
         "groups": [
           {
-            "group": "Overview",
-            "pages": ["api-reference/introduction"]
+            "group": "Getting started",
+            "pages": [
+              "developers/getting-started",
+              "api-reference/introduction"
+            ]
           },
           {
-            "group": "API reference",
-            "pages": ["api-reference/introduction"]
+            "group": "Development",
+            "pages": [
+              "developers/local-setup",
+              "developers/architecture",
+              "developers/authentication"
+            ]
+          },
+          {
+            "group": "Integration",
+            "pages": [
+              "developers/integration",
+              "developers/troubleshooting"
+            ]
+          },
+          {
+            "group": "Contributing",
+            "pages": [
+              "developers/contributing"
+            ]
           }
         ]
       }
@@ -76,6 +108,23 @@
     "socials": {}
   },
   "contextual": {
-    "options": ["copy", "view", "chatgpt", "claude", "perplexity", "mcp", "cursor", "vscode"]
+    "options": [
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "perplexity",
+      "mcp",
+      "cursor",
+      "vscode"
+    ]
+  },
+  "fonts": {
+    "headings": {
+      "family": "Outfit"
+    },
+    "body": {
+      "family": "Outfit"
+    }
   }
 }

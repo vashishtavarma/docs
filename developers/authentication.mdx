@@ -1,0 +1,98 @@
+---
+title: "Authentication"
+description: "JWT-based auth for the EduTube API"
+icon: "key"
+---
+
+## Overview
+
+EduTube uses **JWT (JSON Web Tokens)** for stateless authentication. Register or log in to receive a token, then include it in the `Authorization` header for protected endpoints.
+
+## Flow
+
+```
+┌──────────┐     POST /users/register      ┌──────────┐
+│  Client  │ ────────────────────────────▶ │   API    │
+│          │◀────────────────────────────  │          │
+└──────────┘     { "id": "..." }           └──────────┘
+       │
+       │  POST /users/login
+       │  { "email", "password" }
+       ▼
+┌──────────┐     { "token": "eyJ..." }     ┌──────────┐
+│  Client  │◀────────────────────────────  │   API    │
+└──────────┘                                └──────────┘
+       │
+       │  GET /journeys
+       │  Authorization: Bearer <token>
+       ▼
+┌──────────┐     200 + data                ┌──────────┐
+│  Client  │◀────────────────────────────  │   API    │
+└──────────┘                                └──────────┘
+```
+
+## Register
+
+**Endpoint:** `POST /api/v1/users/register`
+
+**Request body:**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `username` | string | Yes | Display name |
+| `email` | string | Yes | Login identifier; must be unique |
+| `password` | string | Yes | Plain text; stored hashed |
+
+**Response (200):** `{ "id": "<user_id>" }`
+
+**Errors:** 400 if email already exists.
+
+## Login
+
+**Endpoint:** `POST /api/v1/users/login`
+
+**Request body:**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `email` | string | Yes | Registered email |
+| `password` | string | Yes | Plain text |
+
+**Response (200):** `{ "token": "eyJhbGciOiJIUzI1NiIs..." }`
+
+**Errors:** 400 if credentials invalid.
+
+## Using the token
+
+Include the token in every protected request:
+
+```
+Authorization: Bearer <your-token>
+```
+
+Example:
+
+```bash
+curl -X GET https://focus-learn-api.vercel.app/api/v1/users/profile \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+```
+
+## Protected vs public endpoints
+
+| Public (no token) | Protected (token required) |
+|-------------------|----------------------------|
+| `POST /users/register` | `GET /users/profile` |
+| `POST /users/login` | All `/journeys/*`, `/notes/*`, `/chatbot/*` |
+
+## Token details
+
+- **Algorithm:** HS256
+- **Expiry:** Configured by server; typically 7 days
+- **Payload:** Contains `sub` (user id) and `exp` (expiration)
+- **Secret:** `JWT_SECRET` env var on the server
+
+## Security notes
+
+- Never log or expose the token in client-side code (e.g. URLs, localStorage in shared environments).
+- Use HTTPS in production.
+- If a request returns 401, prompt the user to log in again and obtain a new token.

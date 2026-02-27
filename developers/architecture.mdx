@@ -1,0 +1,75 @@
+---
+title: "Architecture"
+description: "EduTube system design and technology stack"
+icon: "diagram-project"
+---
+
+## Overview
+
+EduTube is a full-stack learning platform built for scalability and extensibility. The architecture separates concerns between the web app, API, database, and optional AI services.
+
+## High-level diagram
+
+```
+┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
+│   React SPA     │     │   FastAPI       │     │   MongoDB       │
+│   (Vite)        │────▶│   REST API      │────▶│   Database      │
+│   Port 5173     │     │   Port 5000     │     │                 │
+└─────────────────┘     └────────┬────────┘     └─────────────────┘
+                                 │
+                    ┌────────────┼────────────┐
+                    │            │            │
+                    ▼            ▼            ▼
+            ┌───────────┐ ┌───────────┐ ┌───────────┐
+            │  AWS      │ │  YouTube  │ │  S3       │
+            │  Bedrock  │ │  API      │ │  (transc.)│
+            │  (chatbot)│ │ (playlist)│ │           │
+            └───────────┘ └───────────┘ └───────────┘
+```
+
+## Technology stack
+
+| Layer | Technology | Purpose |
+|-------|------------|---------|
+| **Frontend** | React 18, Vite, Tailwind, shadcn/ui | SPA with dark/light theme, Outfit font |
+| **API** | FastAPI (Python 3.11+) | REST API, JWT auth, async handlers |
+| **Database** | MongoDB | Users, journeys, chapters, notes |
+| **Auth** | JWT (HS256) | Stateless Bearer token auth |
+| **Chatbot** | AWS Bedrock (Nova Lite) | Optional RAG with knowledge base |
+| **Storage** | S3 (optional) | Transcript uploads for RAG pipeline |
+
+## Core resources
+
+- **Users** — Registration, login, profile; owned data via `user_id`
+- **Journeys** — Learning paths; can be public or private; support forking
+- **Chapters** — Ordered items in a journey (often YouTube videos); completion status
+- **Notes** — Rich text per chapter; stored per user per chapter
+- **Chatbot** — Converse API with optional retrieval from knowledge base
+
+## Data flow
+
+1. **User creates a journey from a YouTube playlist**  
+   Backend fetches playlist metadata and video IDs, creates chapters, and runs a background task to fetch transcripts and upload to S3 (if configured).
+
+2. **User marks a chapter complete**  
+   Frontend sends `PUT /journeys/chapters/isComplete/:id`; backend updates the chapter document.
+
+3. **User takes notes**  
+   Notes are stored per chapter; rich text via Quill editor; displayed in study mode.
+
+4. **User asks the chatbot**  
+   If knowledge base is configured, Bedrock retrieves relevant chunks from S3 transcripts and generates a response. Otherwise, general chat only.
+
+## Security
+
+- All endpoints except `/users/register` and `/users/login` require `Authorization: Bearer <token>`
+- JWT is validated on each request; no server-side session store
+- CORS is configured for the frontend origin (`FRONTEND_URL`)
+- Passwords are hashed (bcrypt); never stored or returned in plain text
+
+## Scalability considerations
+
+- **Stateless API** — Scale horizontally behind a load balancer
+- **MongoDB** — Use Atlas for managed scaling; indexes on `user_id`, `journey_id`, `chapter_id`
+- **Background tasks** — Transcript fetching and S3 upload run asynchronously
+- **Optional CDN** — Frontend can be served from a CDN; API remains on origin

@@ -1,0 +1,94 @@
+---
+title: "Troubleshooting"
+description: "Common issues and solutions for developers"
+icon: "circle-question"
+---
+
+## Overview
+
+This guide helps you resolve common issues when integrating with or running the EduTube API.
+
+<AccordionGroup>
+<Accordion title="401 Unauthorized on protected endpoints">
+
+**Cause:** Missing or invalid JWT token.
+
+**Solutions:**
+1. Ensure you include `Authorization: Bearer <token>` in the request header.
+2. Verify the token is from a recent login; expired tokens return 401.
+3. Check that the token string has no extra spaces or line breaks.
+4. Confirm `JWT_SECRET` on the server matches the secret used when the token was issued.
+
+</Accordion>
+<Accordion title="CORS errors in browser">
+
+**Cause:** The request origin is not allowed by the API.
+
+**Solutions:**
+1. Set `FRONTEND_URL` in the backend `.env` to your frontend origin (e.g. `http://localhost:5173`).
+2. Restart the backend after changing `.env`.
+3. For production, ensure the deployed frontend URL is in the allowed origins.
+
+</Accordion>
+<Accordion title="MongoDB connection failed">
+
+**Cause:** Backend cannot reach MongoDB.
+
+**Solutions:**
+1. Verify `MONGODB_URL` in `.env` (e.g. `mongodb://localhost:27017`).
+2. Ensure MongoDB is running locally (`mongod`) or your Atlas cluster is reachable.
+3. For Atlas: check IP whitelist and that the connection string includes credentials.
+4. Test the connection with `mongosh` or a MongoDB client.
+
+</Accordion>
+<Accordion title="YouTube playlist import fails">
+
+**Cause:** Missing or invalid YouTube API key, or playlist not accessible.
+
+**Solutions:**
+1. Set `YT_KEY` in `.env` with a valid YouTube Data API v3 key.
+2. Enable the YouTube Data API v3 in Google Cloud Console.
+3. Confirm the playlist is public or accessible with the provided key.
+4. Check backend logs for specific YouTube API error messages.
+
+</Accordion>
+<Accordion title="Chatbot returns errors or empty responses">
+
+**Cause:** AWS Bedrock not configured or knowledge base misconfigured.
+
+**Solutions:**
+1. Ensure `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, and `AWS_REGION` are set.
+2. Verify `NOVA_LITE_MODEL_ID` is correct for your region (e.g. `apac.amazon.nova-lite-v1:0`).
+3. If using knowledge mode: set `KNOWLEDGE_BASE_ID` and ensure the Bedrock knowledge base is synced.
+4. Check IAM permissions for Bedrock Converse and (if used) Knowledge Base retrieval.
+
+</Accordion>
+<Accordion title="Transcripts not uploading to S3">
+
+**Cause:** S3 configuration missing or invalid.
+
+**Solutions:**
+1. Set `S3_BUCKET` and optionally `S3_TRANSCRIPT_PREFIX` in `.env`.
+2. Verify AWS credentials have `s3:PutObject` permission for the bucket.
+3. Transcript extraction runs in the background; check logs for async task errors.
+4. If S3 is not configured, the pipeline skips upload and only logs—this is expected.
+
+</Accordion>
+<Accordion title="Port already in use">
+
+**Cause:** Another process is using the default port (5000 for API, 5173 for frontend).
+
+**Solutions:**
+1. Backend: set `PORT=5001` (or another port) in `.env`; update frontend `VITE_API_BASE_URL` accordingly.
+2. Frontend: run `npm run dev -- --port 5174` to use a different port.
+3. Find the process: `lsof -i :5000` (Linux/macOS) or `netstat -ano | findstr :5000` (Windows).
+
+</Accordion>
+</AccordionGroup>
+
+## Debugging tips
+
+- **API logs:** Run the backend with `uvicorn main:app --reload` and watch the console for stack traces.
+- **Network:** Use browser DevTools or Postman to inspect request/response headers and body.
+- **Token inspection:** Decode the JWT at [jwt.io](https://jwt.io) to verify payload and expiry (do not paste production tokens in public tools).
+- **MongoDB:** Use Compass or `mongosh` to inspect collections and documents.

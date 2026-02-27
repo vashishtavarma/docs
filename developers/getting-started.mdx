@@ -1,0 +1,76 @@
+---
+title: "Developer quickstart"
+description: "Get started with the EduTube API in minutes"
+icon: "rocket"
+---
+
+## Overview
+
+The EduTube API lets you integrate learning journeys, chapters, notes, and an AI chatbot into your apps. This guide walks you through your first API call.
+
+<Card
+  title="Prerequisites"
+  icon="list-check"
+>
+  - A REST client (Postman, curl, or your app)
+  - Basic familiarity with REST APIs and JWT auth
+</Card>
+
+## Step 1: Register or log in
+
+Get a JWT token by registering or logging in.
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST https://focus-learn-api.vercel.app/api/v1/users/register \
+  -H "Content-Type: application/json" \
+  -d '{"username":"devuser","email":"dev@example.com","password":"YourSecurePass123"}'
+```
+
+```bash Response
+{"id":"64a1b2c3d4e5f6g7h8i9j0k1"}
+```
+
+</CodeGroup>
+
+Then log in to obtain the token:
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST https://focus-learn-api.vercel.app/api/v1/users/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"dev@example.com","password":"YourSecurePass123"}'
+```
+
+```bash Response
+{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."}
+```
+
+</CodeGroup>
+
+## Step 2: Call your first endpoint
+
+Use the token in the `Authorization` header:
+
+<CodeGroup>
+
+```bash cURL
+curl -X GET https://focus-learn-api.vercel.app/api/v1/journeys \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE"
+```
+
+```bash Response
+[]
+```
+
+</CodeGroup>
+
+An empty array means no journeys yet. You can now create journeys, chapters, and notes—see the [API reference](/api-reference/introduction) for all endpoints.
+
+## Next steps
+
+- [Local setup](/developers/local-setup) — Run the API and frontend locally
+- [Architecture](/developers/architecture) — Understand the system design
+- [Authentication](/developers/authentication) — Auth details and token handling

@@ -1,0 +1,76 @@
+---
+title: "Contributing"
+description: "How to contribute to EduTube"
+icon: "code-pull-request"
+---
+
+## Overview
+
+Contributions to EduTube—code, documentation, or bug reports—are welcome. This guide covers how to get started.
+
+## Code contributions
+
+<Steps>
+<Step title="Fork and clone">
+
+Fork the repository and clone your fork locally.
+
+</Step>
+<Step title="Set up development environment">
+
+Follow the [Local setup](/developers/local-setup) guide to run the backend and frontend.
+
+</Step>
+<Step title="Create a branch">
+
+```bash
+git checkout -b feature/your-feature-name
+# or
+git checkout -b fix/issue-description
+```
+
+</Step>
+<Step title="Make changes">
+
+- Follow existing code style and conventions.
+- Add tests where applicable.
+- Update documentation if behavior changes.
+
+</Step>
+<Step title="Commit and push">
+
+```bash
+git add .
+git commit -m "feat: add your change description"
+git push origin feature/your-feature-name
+```
+
+</Step>
+<Step title="Open a pull request">
+
+Open a PR against the main repository. Describe the change, reference any related issues, and ensure CI passes.
+
+</Step>
+</Steps>
+
+## Documentation contributions
+
+- Docs live in the `docs` folder and use [Mintlify](https://mintlify.com).
+- Edit `.mdx` files; configuration is in `docs.json`.
+- Run `mint dev` in the docs directory to preview locally.
+- See `CONTRIBUTING.md` in the repository for writing guidelines (active voice, concise sentences, lead with the goal).
+
+## Bug reports
+
+When reporting a bug, include:
+
+- Steps to reproduce
+- Expected vs actual behavior
+- Environment (OS, browser, API/frontend versions)
+- Relevant logs or error messages (redact secrets)
+
+## Feature requests
+
+- Describe the use case and why it would help.
+- Suggest a concrete design or API shape if possible.
+- Note any alternatives you considered.

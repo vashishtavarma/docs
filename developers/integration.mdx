@@ -1,0 +1,100 @@
+---
+title: "Integration guide"
+description: "Patterns for integrating EduTube into your app"
+icon: "plug"
+---
+
+## Overview
+
+Use the EduTube API to build custom clients, automation, or integrations. This guide covers common patterns and best practices.
+
+## Client patterns
+
+### 1. Web / mobile SPA
+
+- Store the JWT in memory or a secure store (e.g. HttpOnly cookie via backend proxy).
+- On app load, call `GET /users/profile` to validate the token.
+- On 401, redirect to login and clear stored credentials.
+- Use `VITE_API_BASE_URL` (or equivalent) to point to the API base.
+
+### 2. Backend service
+
+- Obtain a token via `POST /users/login` with service credentials.
+- Store the token securely; refresh before expiry.
+- Set `Authorization: Bearer <token>` on all API requests.
+- Respect rate limits and use exponential backoff on 429.
+
+### 3. CLI or script
+
+- Log in once, save the token to a config file (e.g. `~/.edutube/token`).
+- Read the token for subsequent calls.
+- Ensure the config file has restrictive permissions (e.g. `chmod 600`).
+
+## Common workflows
+
+### Create a journey from a YouTube playlist
+
+```
+POST /journeys/playlist
+{
+  "playlist_url": "https://www.youtube.com/playlist?list=PL...",
+  "title": "My Learning Path",
+  "description": "Optional description",
+  "is_public": false
+}
+```
+
+Response includes the journey id. Chapters are created automatically; transcripts are fetched in the background if configured.
+
+### Add notes to a chapter
+
+```
+POST /journeys/chapters/{chapterId}/notes
+{
+  "content": "<p>My note content in HTML</p>"
+}
+```
+
+Notes support rich text (HTML). Use a minimal subset (e.g. `<p>`, `<strong>`, `<ul>`, `<li>`) for compatibility.
+
+### Fork a public journey
+
+```
+POST /journeys/{journeyId}/fork
+```
+
+Creates a copy of the journey (and optionally notes) for the authenticated user. Original remains unchanged.
+
+### Mark chapter complete
+
+```
+PUT /journeys/chapters/isComplete/{chapterId}
+{
+  "is_complete": true
+}
+```
+
+Use this to track progress in custom UIs or sync with external systems.
+
+## Error handling
+
+| Status | Meaning | Action |
+|--------|---------|--------|
+| 200, 201 | Success | Process response body |
+| 400 | Validation error | Check `detail` for field-specific messages |
+| 401 | Unauthorized | Refresh or re-authenticate |
+| 403 | Forbidden | User lacks permission for resource |
+| 404 | Not found | Resource doesn't exist or user has no access |
+| 500 | Server error | Retry with backoff; report if persistent |
+
+## Rate limits
+
+- The API does not enforce strict rate limits by default.
+- For production, implement client-side throttling and respect `Retry-After` if provided.
+- Avoid burst traffic; spread requests over time.
+
+## CORS
+
+- The API allows requests from `FRONTEND_URL` (configured on the server).
+- For custom domains, the backend must include them in CORS origins.
+- Preflight (`OPTIONS`) requests are handled automatically.
