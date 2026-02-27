@@ -1,0 +1,64 @@
+/* EduTube theme overrides - green accent (#16A34A) */
+
+/* Navbar - EduTube green accent */
+#navbar {
+  --primary: #16a34a;
+  --primary-foreground: #ffffff;
+}
+
+/* Primary CTA button - EduTube green */
+.topbar-cta-button,
+button[class*="primary"] {
+  background-color: #16a34a !important;
+  color: white !important;
+  border-color: #16a34a !important;
+}
+
+.topbar-cta-button:hover,
+button[class*="primary"]:hover {
+  background-color: #15803d !important;
+  border-color: #15803d !important;
+}
+
+/* Links - EduTube green */
+a,
+.link,
+.mdx-content a {
+  color: #16a34a !important;
+}
+
+a:hover,
+.link:hover,
+.mdx-content a:hover {
+  color: #15803d !important;
+}
+
+/* Sidebar active/hover states */
+.sidebar-group-header[data-active="true"],
+.toc-item[data-active="true"] {
+  color: #16a34a !important;
+}
+
+/* Nav tabs active state */
+.nav-tabs-item[data-active="true"] {
+  color: #16a34a !important;
+  border-color: #16a34a !important;
+}
+
+/* Cards hover - subtle green border */
+.card:hover {
+  border-color: rgba(22, 163, 74, 0.3) !important;
+}
+
+/* Dark mode link color */
+.dark a,
+.dark .link,
+.dark .mdx-content a {
+  color: #22c55e !important;
+}
+
+.dark a:hover,
+.dark .link:hover,
+.dark .mdx-content a:hover {
+  color: #4ade80 !important;
+}

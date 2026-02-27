@@ -3,7 +3,7 @@
   "openapi": [
     "./api-reference/openapi.json"
   ],
-  "theme": "mint",
+  "theme": "palm",
   "name": "EduTube",
   "description": "Turn YouTube playlists into structured learning journeys. Track progress, take notes, and learn at your own pace.",
   "colors": {
