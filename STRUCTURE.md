@@ -49,4 +49,4 @@ docs/
 
 ## Theme
 
-Docs use EduTube branding: primary green (#16A34A), light (#07C983), dark (#15803D). Configured in `docs.json` under `colors`.
+Docs use a black & white theme: primary (#000000), light (#ffffff), dark (#000000). Configured in `docs.json` under `colors`.

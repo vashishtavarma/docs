@@ -1,4 +1,4 @@
-/* EduTube theme overrides - green accent (#16A34A) */
+/* EduTube theme overrides - black & white */
 
 /* Replace Mint Starter Kit with EduTube in logo/nav area */
 .nav-logo span,
@@ -13,65 +13,65 @@ header [class*="logo"] span::after {
   font-weight: 600;
 }
 
-/* Navbar - EduTube green accent */
+/* Navbar - black accent */
 #navbar {
-  --primary: #16a34a;
+  --primary: #000000;
   --primary-foreground: #ffffff;
 }
 
-/* Primary CTA button - EduTube green */
+/* Primary CTA button - black */
 .topbar-cta-button,
 button[class*="primary"] {
-  background-color: #16a34a !important;
+  background-color: #000000 !important;
   color: white !important;
-  border-color: #16a34a !important;
+  border-color: #000000 !important;
 }
 
 .topbar-cta-button:hover,
 button[class*="primary"]:hover {
-  background-color: #15803d !important;
-  border-color: #15803d !important;
+  background-color: #333333 !important;
+  border-color: #333333 !important;
 }
 
-/* Links - EduTube green */
+/* Links - black */
 a,
 .link,
 .mdx-content a {
-  color: #16a34a !important;
+  color: #000000 !important;
 }
 
 a:hover,
 .link:hover,
 .mdx-content a:hover {
-  color: #15803d !important;
+  color: #404040 !important;
 }
 
 /* Sidebar active/hover states */
 .sidebar-group-header[data-active="true"],
 .toc-item[data-active="true"] {
-  color: #16a34a !important;
+  color: #000000 !important;
 }
 
 /* Nav tabs active state */
 .nav-tabs-item[data-active="true"] {
-  color: #16a34a !important;
-  border-color: #16a34a !important;
+  color: #000000 !important;
+  border-color: #000000 !important;
 }
 
-/* Cards hover - subtle green border */
+/* Cards hover - subtle gray border */
 .card:hover {
-  border-color: rgba(22, 163, 74, 0.3) !important;
+  border-color: rgba(0, 0, 0, 0.2) !important;
 }
 
 /* Dark mode link color */
 .dark a,
 .dark .link,
 .dark .mdx-content a {
-  color: #22c55e !important;
+  color: #a3a3a3 !important;
 }
 
 .dark a:hover,
 .dark .link:hover,
 .dark .mdx-content a:hover {
-  color: #4ade80 !important;
+  color: #e5e5e5 !important;
 }
